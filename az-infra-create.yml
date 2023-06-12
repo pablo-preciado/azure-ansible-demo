@@ -1,0 +1,88 @@
+---
+- name: Azure - Create infrastructure
+  hosts: target_hosts
+
+#  vars:
+
+  tasks:
+
+# For our demo we already have a Resource Group
+# In case you want to create your own Resource Group
+# uncomment the follwing lines and make sure you define
+# the variables as needed
+#    - name: Azure - Create Resource Group
+#      azure.azcollection.azure_rm_resourcegroup:
+#        name: "{{ my_azure_resource_group }}"
+#        location: "{{ my_azure_region }}"
+    
+    - name: Azure - create virtual network
+      azure.azcollection.azure_rm_virtualnetwork:
+        resource_group: "{{ my_azure_resource_group }}"
+        name: "{{ my_azure_vnet }}"
+        address_prefixes: "{{ az_vnet_cidr }}"
+    
+    - name: Azure - create subnet
+      azure.azcollection.azure_rm_subnet:
+        resource_group: "{{ my_azure_resource_group }}"
+        name: "{{ my_azure_subnet }}"
+        address_prefix: "{{ my_azure_vnet_cidr }}"
+        virtual_network: "{{ my_azure_vnet }}"
+    
+    - name: Azure - create security group
+      azure.azcollection.azure_rm_securitygroup:
+        resource_group: "{{ my_azure_resource_group }}"
+        name: "{{ my_azure_security_group }}"
+        rules:
+          - name: External
+            protocol: Tcp
+            destination_port_range:
+              - 80 # HTTP
+              - 443 # HTTPS
+              - 5986 # WinRM
+              - 3389 # RDP
+            access: Allow
+            priority: 1001
+            direction: Inbound
+          - name: Ping
+            protocol: Icmp
+            access: Allow
+            priority: 1002
+            direction: Inbound
+          - name: Internal TCP
+            protocol: Tcp
+            destination_port_range:
+              - 80 # HTTP
+              - 5986 # WinRM
+              - 3389 # RDP
+              - 53 # DNS
+              - 88 # Kerberos Authentication
+              - 135 # RPC
+              - 139 # Netlogon
+              - 389 # LDAP
+              - 445 # SMB
+              - 27199 #Ansible default receptor port
+              - 464 # Kerberos Authentication
+              - 5432 # PostgreSQL
+              - 636 # LDAPS (LDAP over TLS)
+              - 873 # Rsync 
+              - 3268-3269 # Global Catalog 
+              - 1024-65535 # Ephemeral RPC ports
+            access: Allow
+            priority: 1003
+            direction: Inbound
+            source_address_prefix: "{{ my_azure_vnet_cidr }}"
+          - name: Internal UDP
+            protocol: Udp
+            destination_port_range:
+              - 53 # DNS
+              - 88 # Kerberos Authentication
+              - 123 # NTP
+              - 137-138 # Netlogon 
+              - 389 # LDAP 
+              - 445 # SMB
+              - 464 # Kerberos Authentication
+              - 1024-65535 # Ephemeral RPC ports
+            access: Allow
+            priority: 1004
+            direction: Inbound
+            source_address_prefix: "{{ my_azure_vnet_cidr }}"
