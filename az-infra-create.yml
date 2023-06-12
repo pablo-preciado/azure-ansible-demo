@@ -64,6 +64,7 @@
               - 636 # LDAPS (LDAP over TLS)
               - 873 # Rsync 
               - 3268-3269 # Global Catalog 
+              #- 1024-65535 # Ephemeral RPC ports
             access: Allow
             priority: 1003
             direction: Inbound
