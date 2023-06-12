@@ -29,9 +29,9 @@ Then clone this repo and change to the directory of this repo. This is very impo
 
 Log into quay.io with your Red Hat employee account:
 
-´´´
+```
 podman login quay.io
-´´´
+```
 
 Once there you can just modify the values of vars.yml and then run ansible-navigator:
 ```
