@@ -4,8 +4,26 @@
 
   tasks:
 
-    - name: Azure - create nic for virtual machine
-      loop: my_azure_vms
+    #- name: Get facts for a specific image
+    #  azure_rm_virtualmachineimage_info:
+    #    location: westeurope
+    #    publisher: RedHat
+    #    offer: RHEL
+    #    sku: '9_2'
+    #  register: wadibi
+    #
+    #- debug:
+    #    var: wadibi.vmimages
+
+    - name: Azure - apiVersion: tekton.dev/v1beta1
+    kind: ClusterTask
+    metadata:
+      name: foo
+    spec:
+      steps:
+        - image: alpine
+          script: echo helloreate nic for virtual machine
+      loop: "{{ my_azure_vms }}"
       azure.azcollection.azure_rm_networkinterface:
         resource_group: "{{ my_azure_resource_group }}"
         name: "{{ item.name }}_nic"
@@ -13,18 +31,23 @@
         virtual_network: "{{ my_azure_vnet }}"
         subnet: "{{ my_azure_subnet }}"
         security_group: "{{ my_azure_security_group }}"
-    
-    - name: Azure - Crete VM
+        
+    - name: Azure - Create VM
+      loop: "{{ my_azure_vms }}"
       azure.azcollection.azure_rm_virtualmachine:
-      item: my_azure_vms
         resource_group: "{{ my_azure_resource_group }}"
         name: "{{ item.name }}"
         os_type: "{{ item.ostype }}"
-        vm_size: "{{ item.size: }}"
+        vm_size: "{{ item.size }}"
+        priority: "{{ item.priority }}"
         admin_username: "{{ item.username }}"
         admin_password: "{{ item.password }}"
         network_interfaces: "{{ item.name }}_nic"
-        image: "{{ item.image }}"
+        image:
+          publisher: "{{ item.image.publisher }}"
+          offer: "{{ item.image.offer }}"
+          sku: "{{ item.image.sku }}"
+          version: "{{ item.image.version }}"
 #        tags:
 #          blueprint: "{{ az_blueprint }}"
 #          purpose: "{{ az_purpose_tag }}"

@@ -37,3 +37,7 @@ Once there you can just modify the values of vars.yml and then run ansible-navig
 ```
 ansible-navigator run az-infra-create.yml -e @vars.yml
 ```
+
+## Annex I: Finding the publisher, offer, sku and version of your virtual machine image
+
+For me the easiest way of navigating through this is by using the az cli tool. Please, find detailed information [in Microsoft documentation](https://learn.microsoft.com/en-us/azure/virtual-machines/linux/cli-ps-findimage).

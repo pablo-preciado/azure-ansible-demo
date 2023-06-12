@@ -7,14 +7,24 @@ my_azure_subnet: my-subnet
 my_azure_security_group: my-security-group
 my_azure_vms:
   - name: vm1
-    ostype: redhat
-    size: Standard D2s v3
+    ostype: Linux
+    priority: Spot
+    size: Standard_D2s_v3
     username: ansible
-    password: redhat
-    image: Red Hat Enterprise Linux 9.2 (LVM) - Gen2
+    password: Redhat1223334444
+    image:
+      publisher: RedHat
+      offer: RHEL
+      sku: '9_2'
+      version: latest
   - name: vm2
-    ostype: redhat
-    size: Standard D2s v3
+    ostype: Linux
+    priority: Spot
+    size: Standard_D2s_v3
     username: ansible
-    password: redhat
-    image: Red Hat Enterprise Linux 9.2 (LVM) - Gen2
+    password: Redhat1223334444
+    image:
+      publisher: RedHat
+      offer: RHEL
+      sku: '9_2'
+      version: latest
