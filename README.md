@@ -41,3 +41,7 @@ ansible-navigator run az-infra-create.yml -e @vars.yml
 ## Annex I: Finding the publisher, offer, sku and version of your virtual machine image
 
 For me the easiest way of navigating through this is by using the az cli tool. Please, find detailed information [in Microsoft documentation](https://learn.microsoft.com/en-us/azure/virtual-machines/linux/cli-ps-findimage).
+
+## Annex II: Microsoft official documentation about creating Azure Virtual Machines with Ansible
+
+Microsoft has documented what's needed for creating a virtual machine in Azure by using Ansible. [Take a look at it](https://learn.microsoft.com/en-us/azure/developer/ansible/vm-configure?tabs=ansible) if you want to go deeper.

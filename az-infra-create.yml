@@ -13,20 +13,20 @@
 #        name: "{{ my_azure_resource_group }}"
 #        location: "{{ my_azure_region }}"
     
-    - name: Azure - create virtual network
+    - name: Azure - Create virtual network
       azure.azcollection.azure_rm_virtualnetwork:
         resource_group: "{{ my_azure_resource_group }}"
         name: "{{ my_azure_vnet }}"
         address_prefixes: "{{ my_azure_vnet_cidr }}"
     
-    - name: Azure - create subnet
+    - name: Azure - Create subnet
       azure.azcollection.azure_rm_subnet:
         resource_group: "{{ my_azure_resource_group }}"
         name: "{{ my_azure_subnet }}"
         address_prefix: "{{ my_azure_vnet_cidr }}"
         virtual_network: "{{ my_azure_vnet }}"
     
-    - name: Azure - create security group
+    - name: Azure - Create security group
       azure.azcollection.azure_rm_securitygroup:
         resource_group: "{{ my_azure_resource_group }}"
         name: "{{ my_azure_security_group }}"
@@ -34,6 +34,7 @@
           - name: External
             protocol: Tcp
             destination_port_range:
+              - 22  #ssh
               - 80 # HTTP
               - 443 # HTTPS
               - 5986 # WinRM

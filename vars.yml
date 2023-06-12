@@ -1,6 +1,6 @@
 ---
 my_azure_resource_group: openenv-qrck4
-my_azure_region: euwest-1
+my_azure_region: useast-1
 my_azure_vnet: my-virtual-network
 my_azure_vnet_cidr: 192.168.1.0/24
 my_azure_subnet: my-subnet

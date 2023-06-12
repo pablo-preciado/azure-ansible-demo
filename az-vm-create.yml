@@ -15,14 +15,7 @@
     #- debug:
     #    var: wadibi.vmimages
 
-    - name: Azure - apiVersion: tekton.dev/v1beta1
-    kind: ClusterTask
-    metadata:
-      name: foo
-    spec:
-      steps:
-        - image: alpine
-          script: echo helloreate nic for virtual machine
+    - name: Azure - Create nic for virtual machine
       loop: "{{ my_azure_vms }}"
       azure.azcollection.azure_rm_networkinterface:
         resource_group: "{{ my_azure_resource_group }}"
