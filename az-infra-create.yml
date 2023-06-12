@@ -17,7 +17,7 @@
       azure.azcollection.azure_rm_virtualnetwork:
         resource_group: "{{ my_azure_resource_group }}"
         name: "{{ my_azure_vnet }}"
-        address_prefixes: "{{ az_vnet_cidr }}"
+        address_prefixes: "{{ my_azure_vnet_cidr }}"
     
     - name: Azure - create subnet
       azure.azcollection.azure_rm_subnet:
