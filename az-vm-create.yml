@@ -1,30 +1,35 @@
 ---
-- name: Azure - create nic for virtual machine
-  azure.azcollection.azure_rm_networkinterface:
-  item: my_azure_vms
-    resource_group: "{{ my_azure_resource_group }}"
-    name: "{{ item.name }}_nic"
-    public_ip_name: "{{ item.name }}_ip"
-    virtual_network: "{{ my_azure_vnet }}"
-    subnet: "{{ my_azure_subnet }}"
-    security_group: "{{ my_azure_security_group }}"
+- name: Azure - Create virtual machines
+  hosts: localhost
 
-- name: Azure - Crete VM
-  azure.azcollection.azure_rm_virtualmachine:
-  item: my_azure_vms
-    resource_group: "{{ my_azure_resource_group }}"
-    name: "{{ item.name }}"
-    os_type: "{{ item.ostype }}"
-    vm_size: "{{ item.size: }}"
-    admin_username: "{{ item.username }}"
-    admin_password: "{{ item.password }}"
-    network_interfaces: "{{ item.name }}_nic"
-    image: "{{ item.image }}"
-    tags:
-      blueprint: "{{ az_blueprint }}"
-      purpose: "{{ az_purpose_tag }}"
-      env: "{{ az_env_tag }}"
-      ansible_group: "{{ az_ansiblegroup_tag }}"
-      owner: "{{ az_vm_owner }}"
-      info: "This instance was built by Red Hat Product Demos"
-      Name: "{{ az_vm_name }}"
+  tasks:
+
+    - name: Azure - create nic for virtual machine
+      azure.azcollection.azure_rm_networkinterface:
+      item: my_azure_vms
+        resource_group: "{{ my_azure_resource_group }}"
+        name: "{{ item.name }}_nic"
+        public_ip_name: "{{ item.name }}_ip"
+        virtual_network: "{{ my_azure_vnet }}"
+        subnet: "{{ my_azure_subnet }}"
+        security_group: "{{ my_azure_security_group }}"
+    
+    - name: Azure - Crete VM
+      azure.azcollection.azure_rm_virtualmachine:
+      item: my_azure_vms
+        resource_group: "{{ my_azure_resource_group }}"
+        name: "{{ item.name }}"
+        os_type: "{{ item.ostype }}"
+        vm_size: "{{ item.size: }}"
+        admin_username: "{{ item.username }}"
+        admin_password: "{{ item.password }}"
+        network_interfaces: "{{ item.name }}_nic"
+        image: "{{ item.image }}"
+        tags:
+          blueprint: "{{ az_blueprint }}"
+          purpose: "{{ az_purpose_tag }}"
+          env: "{{ az_env_tag }}"
+          ansible_group: "{{ az_ansiblegroup_tag }}"
+          owner: "{{ az_vm_owner }}"
+          info: "This instance was built by Red Hat Product Demos"
+          Name: "{{ az_vm_name }}"

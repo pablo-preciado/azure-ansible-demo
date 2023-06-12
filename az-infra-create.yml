@@ -1,6 +1,6 @@
 ---
 - name: Azure - Create infrastructure
-  hosts: target_hosts
+  hosts: localhost
 
   tasks:
 
