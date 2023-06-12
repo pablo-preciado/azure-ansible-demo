@@ -47,7 +47,7 @@
             access: Allow
             priority: 1002
             direction: Inbound
-          - name: Internal TCP
+          - name: InternalTCP
             protocol: Tcp
             destination_port_range:
               - 80 # HTTP
@@ -63,13 +63,12 @@
               - 5432 # PostgreSQL
               - 636 # LDAPS (LDAP over TLS)
               - 873 # Rsync 
-              #- 3268-3269 # Global Catalog 
-              - 1024-65535 # Ephemeral RPC ports
+              - 3268-3269 # Global Catalog 
             access: Allow
             priority: 1003
             direction: Inbound
             source_address_prefix: "{{ my_azure_vnet_cidr }}"
-          - name: Internal UDP
+          - name: InternalUDP
             protocol: Udp
             destination_port_range:
               - 53 # DNS
