@@ -5,8 +5,8 @@
   tasks:
 
     - name: Azure - create nic for virtual machine
+      loop: my_azure_vms
       azure.azcollection.azure_rm_networkinterface:
-      item: my_azure_vms
         resource_group: "{{ my_azure_resource_group }}"
         name: "{{ item.name }}_nic"
         public_ip_name: "{{ item.name }}_ip"
@@ -25,11 +25,11 @@
         admin_password: "{{ item.password }}"
         network_interfaces: "{{ item.name }}_nic"
         image: "{{ item.image }}"
-        tags:
-          blueprint: "{{ az_blueprint }}"
-          purpose: "{{ az_purpose_tag }}"
-          env: "{{ az_env_tag }}"
-          ansible_group: "{{ az_ansiblegroup_tag }}"
-          owner: "{{ az_vm_owner }}"
-          info: "This instance was built by Red Hat Product Demos"
-          Name: "{{ az_vm_name }}"
+#        tags:
+#          blueprint: "{{ az_blueprint }}"
+#          purpose: "{{ az_purpose_tag }}"
+#          env: "{{ az_env_tag }}"
+#          ansible_group: "{{ az_ansiblegroup_tag }}"
+#          owner: "{{ az_vm_owner }}"
+#          info: "This instance was built by Red Hat Product Demos"
+#          Name: "{{ az_vm_name }}"

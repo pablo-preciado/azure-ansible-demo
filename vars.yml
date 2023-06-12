@@ -2,19 +2,19 @@
 my_azure_resource_group: openenv-qrck4
 my_azure_region: euwest-1
 my_azure_vnet: my-virtual-network
-my_azure_vnet_cidr: 192.168.0.0/16
+my_azure_vnet_cidr: 192.168.1.0/24
 my_azure_subnet: my-subnet
 my_azure_security_group: my-security-group
 my_azure_vms:
   - name: vm1
     ostype: redhat
-    size: DS4
+    size: Standard D2s v3
     username: ansible
     password: redhat
-    image: he
+    image: Red Hat Enterprise Linux 9.2 (LVM) - Gen2
   - name: vm2
     ostype: redhat
-    size: DS4
+    size: Standard D2s v3
     username: ansible
     password: redhat
-    image: he
+    image: Red Hat Enterprise Linux 9.2 (LVM) - Gen2
