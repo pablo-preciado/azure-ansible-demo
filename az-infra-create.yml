@@ -59,12 +59,11 @@
               - 139 # Netlogon
               - 389 # LDAP
               - 445 # SMB
-              - 27199 #Ansible default receptor port
               - 464 # Kerberos Authentication
               - 5432 # PostgreSQL
               - 636 # LDAPS (LDAP over TLS)
               - 873 # Rsync 
-              - 3268-3269 # Global Catalog 
+              #- 3268-3269 # Global Catalog 
               - 1024-65535 # Ephemeral RPC ports
             access: Allow
             priority: 1003

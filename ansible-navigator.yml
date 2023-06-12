@@ -2,6 +2,13 @@ ansible-navigator:
   execution-environment:
     pull:
       policy: missing
+    environment-variables:
+      pass:
+        - AZURE_SUBSCRIPTION_ID
+        - AZURE_CLIENT_ID
+        - AZURE_SECRET
+        - AZURE_TENANT
+
   playbook-artifact:
     enable: false
   mode: stdout

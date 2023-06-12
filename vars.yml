@@ -1,5 +1,5 @@
 ---
-my_azure_resource_group: rg-gk57
+my_azure_resource_group: openenv-qrck4
 my_azure_region: euwest-1
 my_azure_vnet: mynetwork
 my_azure_vnet_cidr: 192.168.0.0/16
