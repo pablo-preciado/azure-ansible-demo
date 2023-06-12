@@ -1,10 +1,10 @@
 ---
 my_azure_resource_group: openenv-qrck4
 my_azure_region: euwest-1
-my_azure_vnet: mynetwork
+my_azure_vnet: my-virtual-network
 my_azure_vnet_cidr: 192.168.0.0/16
-my_azure_subnet: mysubnet
-my_azure_security_group: mysecgroup
+my_azure_subnet: my-subnet
+my_azure_security_group: my-security-group
 my_azure_vms:
   - name: vm1
     ostype: redhat
