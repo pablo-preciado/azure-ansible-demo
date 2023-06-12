@@ -31,15 +31,25 @@
         resource_group: "{{ my_azure_resource_group }}"
         name: "{{ my_azure_security_group }}"
         rules:
+          - name: SSH
+            protocol: Tcp
+            destination_port_range: 22
+            access: Allow
+            priority: 999
+            direction: Inbound
+          - name: Ansible-receptor
+            protocol: Tcp
+            destination_port_range: 27199
+            access: Allow
+            priority: 1000
+            direction: Inbound
           - name: External
             protocol: Tcp
             destination_port_range:
-              - 22  #ssh
               - 80 # HTTP
               - 443 # HTTPS
               - 5986 # WinRM
               - 3389 # RDP
-              - 27199 #Ansible default receptor port
             access: Allow
             priority: 1001
             direction: Inbound
