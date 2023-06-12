@@ -7,3 +7,16 @@ my_azure_vnet: mynetwork
 my_azure_vnet_cidr: 192.168.0.0/16
 my_azure_subnet: mysubnet
 my_azure_security_group: mysecgroup
+my_azure_vms:
+  - name: vm1
+    ostype: redhat
+    size: DS4
+    username: ansible
+    password: redhat
+    image: he
+  - name: vm2
+    ostype: redhat
+    size: DS4
+    username: ansible
+    password: redhat
+    image: he
