@@ -2,8 +2,6 @@
 - name: Azure - Create infrastructure
   hosts: target_hosts
 
-#  vars:
-
   tasks:
 
 # For our demo we already have a Resource Group
@@ -40,6 +38,7 @@
               - 443 # HTTPS
               - 5986 # WinRM
               - 3389 # RDP
+              - 27199 #Ansible default receptor port
             access: Allow
             priority: 1001
             direction: Inbound
