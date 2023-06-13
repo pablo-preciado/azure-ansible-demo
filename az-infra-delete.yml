@@ -17,8 +17,17 @@
         name: "{{ my_azure_vnet }}"
         state: absent
     
-    - name: Delete Security Group
+    - name: Delete Network Security Group
       azure.azcollection.azure_rm_securitygroup:
         resource_group: "{{ my_azure_resource_group }}"
-        name: "{{ my_azure_security_group }}"
+        name: "{{ my_azure_network_security_group }}"
+        state: absent
+
+    - name: Delete Application Security Group (private and public)
+      with_items:
+        - "{{ my_azure_public_asg }}"
+        - "{{ my_azure_private_asg }}"
+      azure_rm_applicationsecuritygroup:
+        resource_group: "{{ my_azure_resource_group }}"
+        name: "{{ item }}"
         state: absent

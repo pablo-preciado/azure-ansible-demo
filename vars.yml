@@ -1,10 +1,14 @@
 ---
 my_azure_resource_group: openenv-qrck4
 my_azure_region: useast-1
+
 my_azure_vnet: my-virtual-network
 my_azure_vnet_cidr: 192.168.1.0/24
 my_azure_subnet: my-subnet
-my_azure_security_group: my-security-group
+my_azure_network_security_group: my-network-security-group
+my_azure_public_asg: my-public-asg
+my_azure_private_asg: my-private-asg
+
 my_azure_vms:
   - name: vm1
     ostype: Linux
@@ -12,6 +16,7 @@ my_azure_vms:
     size: Standard_D2s_v3
     username: ansible
     password: Redhat1223334444
+    asg: "{{ my_azure_public_asg }}"
     image:
       publisher: RedHat
       offer: RHEL
@@ -23,6 +28,7 @@ my_azure_vms:
     size: Standard_D2s_v3
     username: ansible
     password: Redhat1223334444
+    asg: "{{ my_azure_private_asg }}"
     image:
       publisher: RedHat
       offer: RHEL

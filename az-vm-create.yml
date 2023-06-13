@@ -20,10 +20,20 @@
       azure.azcollection.azure_rm_networkinterface:
         resource_group: "{{ my_azure_resource_group }}"
         name: "{{ item.name }}_nic"
-        public_ip_name: "{{ item.name }}_ip"
+        #public_ip_name: "{{ item.name }}_ip"
         virtual_network: "{{ my_azure_vnet }}"
         subnet: "{{ my_azure_subnet }}"
-        security_group: "{{ my_azure_security_group }}"
+        security_group: "{{ my_azure_network_security_group }}"
+        ip_configurations:
+          - name: "{{ item.name }}_ip-config"
+            public_ip_address_name: "{{ item.name }}_ip"
+            primary: True
+            #private_ip_address:
+            private_ip_allocation_method: "Dynamic"
+            #public_ip:
+            public_ip_allocation_method: "Dynamic"
+            application_security_groups: "{{ item.asg }}"
+        
         
     - name: Create VM
       loop: "{{ my_azure_vms }}"
@@ -43,9 +53,3 @@
           version: "{{ item.image.version }}"
 #        tags:
 #          blueprint: "{{ az_blueprint }}"
-#          purpose: "{{ az_purpose_tag }}"
-#          env: "{{ az_env_tag }}"
-#          ansible_group: "{{ az_ansiblegroup_tag }}"
-#          owner: "{{ az_vm_owner }}"
-#          info: "This instance was built by Red Hat Product Demos"
-#          Name: "{{ az_vm_name }}"
