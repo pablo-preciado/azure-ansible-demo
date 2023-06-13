@@ -1,10 +1,10 @@
 ---
-- name: Azure - Delete all Virtual Machines in a Resource Group
+- name: Azure - Start all Virtual Machines in a Resource Group
   hosts: localhost
 
   tasks:
 
-    - name: Get facts for all virtual machines of a resource group
+    - name: Get facts for all virtual machines of a Resource Group
       register: r
       azure_rm_virtualmachine_info:
         resource_group: "{{ my_azure_resource_group }}"
@@ -12,13 +12,13 @@
     - name: Show list of VMs and state
       loop: "{{ r.vms }}"    
       debug:
-        msg: The Virtual Machine {{ item.name }} is in state {{ item. power_state }} and will be deleted.
+        msg: The Virtual Machine {{ item.name }} is in state {{ item. power_state }} and will be started.
 
 
-    - name: Destroy all VMs in resource group
+    - name: Start all VMs in resource group
       loop: "{{ r.vms }}"
       azure.azcollection.azure_rm_virtualmachine:
         resource_group: "{{ my_azure_resource_group }}"
         name: "{{ item.name }}"
-        state: absent
-        remove_on_absent: all #all_autocreated
+        state: present
+        started: true

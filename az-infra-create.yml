@@ -4,29 +4,20 @@
 
   tasks:
 
-# For our demo we already have a Resource Group
-# In case you want to create your own Resource Group
-# uncomment the follwing lines and make sure you define
-# the variables as needed
-#    - name: Azure - Create Resource Group
-#      azure.azcollection.azure_rm_resourcegroup:
-#        name: "{{ my_azure_resource_group }}"
-#        location: "{{ my_azure_region }}"
-    
-    - name: Azure - Create virtual network
+    - name: Create Virtual Network
       azure.azcollection.azure_rm_virtualnetwork:
         resource_group: "{{ my_azure_resource_group }}"
         name: "{{ my_azure_vnet }}"
         address_prefixes: "{{ my_azure_vnet_cidr }}"
     
-    - name: Azure - Create subnet
+    - name: Create Subnet
       azure.azcollection.azure_rm_subnet:
         resource_group: "{{ my_azure_resource_group }}"
         name: "{{ my_azure_subnet }}"
         address_prefix: "{{ my_azure_vnet_cidr }}"
         virtual_network: "{{ my_azure_vnet }}"
     
-    - name: Azure - Create security group
+    - name: Create Security Group
       azure.azcollection.azure_rm_securitygroup:
         resource_group: "{{ my_azure_resource_group }}"
         name: "{{ my_azure_security_group }}"

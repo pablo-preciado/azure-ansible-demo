@@ -1,0 +1,24 @@
+---
+- name: Azure - Delete infrastructure
+  hosts: localhost
+
+  tasks:
+ 
+    - name: Delete Subnet
+      azure.azcollection.azure_rm_subnet:
+        resource_group: "{{ my_azure_resource_group }}"
+        name: "{{ my_azure_subnet }}"
+        virtual_network: "{{ my_azure_vnet }}"
+        state: absent
+        
+    - name: Delete Virtual Network
+      azure.azcollection.azure_rm_virtualnetwork:
+        resource_group: "{{ my_azure_resource_group }}"
+        name: "{{ my_azure_vnet }}"
+        state: absent
+    
+    - name: Delete Security Group
+      azure.azcollection.azure_rm_securitygroup:
+        resource_group: "{{ my_azure_resource_group }}"
+        name: "{{ my_azure_security_group }}"
+        state: absent
