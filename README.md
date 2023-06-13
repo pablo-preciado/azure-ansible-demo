@@ -27,7 +27,7 @@ Be aware that AZURE_SECRET is your password, not your Client Secret.
 
 Then clone this repo and change to the directory of this repo. This is very important as you need to be in this directory so ansible-navigator catches the config from the files here. These files configure ansible-navigator so it can pass the ENV variables to the execution environment among other things.
 
-Log into quay.io with your Red Hat employee account:
+Log into quay.io with your Red Hat employee account (you need to have the employee account to use the Execution Environment):
 
 ```
 podman login quay.io
@@ -37,6 +37,12 @@ Once there you can just modify the values of vars.yml and then run ansible-navig
 ```
 ansible-navigator run az-infra-create.yml -e @vars.yml
 ```
+Then deploy your virtual machines:
+```
+ansible-navigator run az-vm-create.yml -e @vars.yml
+```
+
+Use the same command but changing the playbook for differen operations such as stopping, starting or deleting your virtual machines. This repo also provides the playbook for deleting all your infra.
 
 ## Annex I: Finding the publisher, offer, sku and version of your virtual machine image
 
