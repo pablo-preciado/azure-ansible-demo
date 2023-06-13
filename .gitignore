@@ -1,2 +1,3 @@
 *.log
 .vscode/
+automation-controller/my_vars.yml
