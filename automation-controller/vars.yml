@@ -1,0 +1,7 @@
+    my_controller_fqdn: <yourcontrollerfqdn>
+    my_controller_user: <yourcontrolleruser>
+    my_controller_pass: <yourcontrollerpassword>
+    my_customer_name: <yourcustomername>
+    my_git_url: https://github.com/pablo-preciado/azure-ansible-demo.git
+    my_quay_user: <yourquayuser>
+    my_quay_password: <yourquaypassword>

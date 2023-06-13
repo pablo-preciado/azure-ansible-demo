@@ -10,7 +10,7 @@ my_azure_public_asg: my-public-asg
 my_azure_private_asg: my-private-asg
 
 my_azure_vms:
-  - name: vm1
+  - name: hop-vm
     ostype: Linux
     priority: Spot
     size: Standard_D2s_v3
@@ -22,7 +22,7 @@ my_azure_vms:
       offer: RHEL
       sku: '9_2'
       version: latest
-  - name: vm2
+  - name: execution-node-1
     ostype: Linux
     priority: Spot
     size: Standard_D2s_v3
@@ -34,3 +34,51 @@ my_azure_vms:
       offer: RHEL
       sku: '9_2'
       version: latest
+  - name: execution-node-2
+    ostype: Linux
+    priority: Spot
+    size: Standard_D2s_v3
+    username: ansible
+    password: Redhat1223334444
+    asg: "{{ my_azure_private_asg }}"
+    image:
+      publisher: RedHat
+      offer: RHEL
+      sku: '9_2'
+      version: latest
+  - name: managed-node-1
+    ostype: Linux
+    priority: Spot
+    size: Standard_D2s_v3
+    username: ansible
+    password: Redhat1223334444
+    asg: "{{ my_azure_private_asg }}"
+    image:
+      publisher: RedHat
+      offer: RHEL
+      sku: '9_2'
+      version: latest
+  - name: managed-node-2
+    ostype: Linux
+    priority: Spot
+    size: Standard_D2s_v3
+    username: ansible
+    password: Redhat1223334444
+    asg: "{{ my_azure_private_asg }}"
+    image:
+      publisher: RedHat
+      offer: RHEL
+      sku: '9_2'
+      version: latest
+  - name: managed-node-3
+    ostype: Linux
+    priority: Spot
+    size: Standard_D2s_v3
+    username: ansible
+    password: Redhat1223334444
+    asg: "{{ my_azure_private_asg }}"
+    image:
+      publisher: RedHat
+      offer: RHEL
+      sku: '9_2'
+      version: latest 

@@ -1,0 +1,294 @@
+- hosts: localhost
+  become: yes
+  gather_facts: no
+
+  tasks:
+
+   - name: 'Create "{{ my_customer_name }} organization"'
+     ansible.controller.organization:
+       controller_host: "{{ my_controller_fqdn }}"
+       controller_username: "{{ my_controller_user }}"
+       controller_password: "{{ my_controller_pass }}"
+       validate_certs: no
+       name: "{{ my_customer_name }} Organization"
+       state: present
+
+   - name: 'Create quay.io credentials'
+     ansible.controller.credential:
+       name: Quay.io credentials
+       controller_host: "{{ my_controller_fqdn }}"
+       controller_username: "{{ my_controller_user }}"
+       controller_password: "{{ my_controller_pass }}"
+       validate_certs: no
+       organization: "{{ my_customer_name }} Organization"
+       state: present
+       credential_type: Container Registry
+       inputs:
+         host: quay.io
+         username: "{{ my_quay_user }}"
+         password: "{{ my_quay_password }}"
+
+   - name: 'Create Azure credentials'
+     ansible.controller.credential:
+       name: Azure credentials
+       controller_host: "{{ my_controller_fqdn }}"
+       controller_username: "{{ my_controller_user }}"
+       controller_password: "{{ my_controller_pass }}"
+       validate_certs: no
+       organization: "{{ my_customer_name }} Organization"
+       state: present
+       credential_type: Microsoft Azure Resource Manager
+       inputs:
+         subscription: "{{ lookup('env','AZURE_SUBSCRIPTION_ID') }}"
+         secret: "{{ lookup('env','AZURE_SECRET') }}"
+         client: "{{ lookup('env','AZURE_CLIENT_ID') }}"
+         tenant: "{{ lookup('env','AZURE_TENANT') }}"
+
+   - name: 'Add "My Azure demo" inventory'
+     ansible.controller.inventory:
+       name: "My Azure demo inventory"
+       controller_host: "{{ my_controller_fqdn }}"
+       controller_username: "{{ my_controller_user }}"
+       controller_password: "{{ my_controller_pass }}"
+       validate_certs: no
+       organization: "{{ my_customer_name }} Organization"
+       state: present
+
+   - name: Add an inventory source for Azure inventory
+     ansible.controller.inventory_source:
+       controller_host: "{{ my_controller_fqdn }}"
+       controller_username: "{{ my_controller_user }}"
+       controller_password: "{{ my_controller_pass }}"
+       validate_certs: no
+       name: "Azure-source"
+       description: Source from Azure inventory
+       inventory: My Azure demo inventory
+       credential: Azure credentials
+       overwrite: True
+       update_on_launch: True
+       organization: "{{ my_customer_name }} Organization"
+       source: azure_rm
+       source_vars:
+         private: false
+
+   - name: Update Azure inventory source
+     ansible.controller.inventory_source_update:
+       controller_host: "{{ my_controller_fqdn }}"
+       controller_username: "{{ my_controller_user }}"
+       controller_password: "{{ my_controller_pass }}"
+       validate_certs: no
+       name: "Azure-source"
+       inventory: "My Azure demo inventory"
+       organization: "{{ my_customer_name }} Organization"
+
+   - name: Add Ansible SSA execution environment
+     ansible.controller.execution_environment:
+       controller_host: "{{ my_controller_fqdn }}"
+       controller_username: "{{ my_controller_user }}"
+       controller_password: "{{ my_controller_pass }}"
+       validate_certs: no
+       name: "Ansible SSA"
+       image: quay.io/redhat_emp1/ee-ansible-ssa:latest
+       credential: Quay.io credentials
+
+   - name: 'Add "My Azure demo" project'
+     ansible.controller.project:
+       name: "My Azure demo project"
+       controller_host: "{{ my_controller_fqdn }}"
+       controller_username: "{{ my_controller_user }}"
+       controller_password: "{{ my_controller_pass }}"
+       validate_certs: no
+       organization: "{{ my_customer_name }} Organization"
+       scm_type: git
+       scm_url: "{{ my_git_url }}"
+       scm_update_on_launch: True
+       scm_clean: yes
+       scm_delete_on_update: yes
+       scm_update_cache_timeout: 0
+       default_environment: "Ansible SSA"
+       state: present
+
+   - name: 'Launch a "My Azure demo project" update'
+     ansible.controller.project_update:
+       controller_host: "{{ my_controller_fqdn }}"
+       controller_username: "{{ my_controller_user }}"
+       controller_password: "{{ my_controller_pass }}"
+       validate_certs: no
+       organization: "{{ my_customer_name }} Organization"
+       project: "My Azure demo project"
+
+   - name: 'Create "Azure demo - Create infra" job template'
+     with_items:
+       - "az-infra-create.yml"
+       - "az-infra-delete.yml"
+       - "az-vm-create.yml"
+       - "az-vm-delete.yml"
+       - "az-vm-start.yml"
+       - "az-vm-stop.yml"
+       - "az-nsg-allowssh-to-all.yml"
+     ansible.controller.job_template:
+       controller_host: "{{ my_controller_fqdn }}"
+       controller_username: "{{ my_controller_user }}"
+       controller_password: "{{ my_controller_pass }}"
+       validate_certs: no
+       name: "Azure demo - {{ item }}"
+       job_type: "run"
+       organization: "{{ my_customer_name }} Organization"
+       inventory: "My Azure demo inventory"
+       project: "My Azure demo project"
+       playbook: "{{ item }}"
+       credentials: "Azure credentials"
+       state: "present"
+       extra_vars:
+         my_azure_resource_group: openenv-qrck4
+         my_azure_region: useast-1
+         my_azure_vnet: my-virtual-network
+         my_azure_vnet_cidr: 192.168.1.0/24
+         my_azure_subnet: my-subnet
+         my_azure_network_security_group: my-network-security-group
+         my_azure_public_asg: my-public-asg
+         my_azure_private_asg: my-private-asg
+         my_azure_vms:
+           - name: hop-vm
+             ostype: Linux
+             priority: Spot
+             size: Standard_D2s_v3
+             username: ansible
+             password: Redhat1223334444
+             asg: my-public-asg
+             image:
+               publisher: RedHat
+               offer: RHEL
+               sku: '9_2'
+               version: latest
+           - name: execution-node-1
+             ostype: Linux
+             priority: Spot
+             size: Standard_D2s_v3
+             username: ansible
+             password: Redhat1223334444
+             asg: my-private-asg
+             image:
+               publisher: RedHat
+               offer: RHEL
+               sku: '9_2'
+               version: latest
+           - name: execution-node-2
+             ostype: Linux
+             priority: Spot
+             size: Standard_D2s_v3
+             username: ansible
+             password: Redhat1223334444
+             asg: my-private-asg
+             image:
+               publisher: RedHat
+               offer: RHEL
+               sku: '9_2'
+               version: latest
+           - name: managed-node-1
+             ostype: Linux
+             priority: Spot
+             size: Standard_D2s_v3
+             username: ansible
+             password: Redhat1223334444
+             asg: my-private-asg
+             image:
+               publisher: RedHat
+               offer: RHEL
+               sku: '9_2'
+               version: latest
+           - name: managed-node-2
+             ostype: Linux
+             priority: Spot
+             size: Standard_D2s_v3
+             username: ansible
+             password: Redhat1223334444
+             asg: my-private-asg
+             image:
+               publisher: RedHat
+               offer: RHEL
+               sku: '9_2'
+               version: latest
+           - name: managed-node-3
+             ostype: Linux
+             priority: Spot
+             size: Standard_D2s_v3
+             username: ansible
+             password: Redhat1223334444
+             asg: my-private-asg
+             image:
+               publisher: RedHat
+               offer: RHEL
+               sku: '9_2'
+               version: latest 
+         
+
+
+
+
+
+
+
+
+
+
+#
+#   - name: 'Create "Ubuntu demo - undeploy web servers" job template'
+#     ansible.controller.job_template:
+#       controller_host: "{{ my_controller_fqdn }}"
+#       controller_username: "{{ my_controller_user }}"
+#       controller_password: "{{ my_controller_pass }}"
+#       validate_certs: no
+#       name: "Ubuntu demo - undeploy web servers"
+#       job_type: "run"
+#       organization: "{{ my_customer_name }} Organization"
+#       inventory: "My Ubuntu demo inventory"
+#       project: "My Azure demo project"
+#       playbook: "undo-ubuntu-web-server.yml"
+#       credentials: "Target host credentials"
+#       state: "present"
+#
+#   - name: 'Create "Ubuntu demo - add info to web servers" job template'
+#     ansible.controller.job_template:
+#       controller_host: "{{ my_controller_fqdn }}"
+#       controller_username: "{{ my_controller_user }}"
+#       controller_password: "{{ my_controller_pass }}"
+#       validate_certs: no
+#       name: "Ubuntu demo - add info to web servers"
+#       job_type: "run"
+#       organization: "{{ my_customer_name }} Organization"
+#       inventory: "My Ubuntu demo inventory"
+#       project: "My Azure demo project"
+#       playbook: "add-info-to-index.yml"
+#       credentials: "Target host credentials"
+#       state: "present"
+#
+#   - name: 'Create "Ubuntu demo - demonstrate idempotency" job template'
+#     ansible.controller.job_template:
+#       controller_host: "{{ my_controller_fqdn }}"
+#       controller_username: "{{ my_controller_user }}"
+#       controller_password: "{{ my_controller_pass }}"
+#       validate_certs: no
+#       name: "Ubuntu demo - demonstrate idempotency"
+#       job_type: "run"
+#       organization: "{{ my_customer_name }} Organization"
+#       inventory: "My Ubuntu demo inventory"
+#       project: "My Azure demo project"
+#       playbook: "idempotency.yml"
+#       credentials: "Target host credentials"
+#       state: "present"
+#
+#   - name: 'Create "Ubuntu demo - fail idempotency" job template'
+#     ansible.controller.job_template:
+#       controller_host: "{{ my_controller_fqdn }}"
+#       controller_username: "{{ my_controller_user }}"
+#       controller_password: "{{ my_controller_pass }}"
+#       validate_certs: no
+#       name: "Ubuntu demo - fail idempotency"
+#       job_type: "run"
+#       organization: "{{ my_customer_name }} Organization"
+#       inventory: "My Ubuntu demo inventory"
+#       project: "My Azure demo project"
+#       playbook: "not-idempotency.yml"
+#       credentials: "Target host credentials"
+#       state: "present"

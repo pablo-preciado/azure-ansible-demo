@@ -44,6 +44,14 @@ ansible-navigator run az-vm-create.yml -e @vars.yml
 
 Use the same command but changing the playbook for differen operations such as stopping, starting or deleting your virtual machines. This repo also provides the playbook for deleting all your infra.
 
+## Configuring an automation controller to use this playbooks as Job Templates
+
+You can automatically configure your Automation Controller by filling the values under automation-controller/vars.yml and running the following command:
+
+```
+ansible-navigator run automation-controller/controller-configuration.yml -e @automation-controller/vars.yml
+```
+
 ## Annex I: Finding the publisher, offer, sku and version of your virtual machine image
 
 For me the easiest way of navigating through this is by using the az cli tool. Please, find detailed information [in Microsoft documentation](https://learn.microsoft.com/en-us/azure/virtual-machines/linux/cli-ps-findimage).
