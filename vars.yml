@@ -12,7 +12,7 @@ my_azure_private_asg: my-private-asg
 my_azure_vms:
   - name: hop-vm
     ostype: Linux
-    priority: Spot
+    priority: None #Spot
     size: Standard_D2s_v3
     username: ansible
     password: Redhat1223334444
@@ -24,7 +24,7 @@ my_azure_vms:
       version: latest
   - name: execution-node-1
     ostype: Linux
-    priority: Spot
+    priority: None #Spot
     size: Standard_D2s_v3
     username: ansible
     password: Redhat1223334444
@@ -36,7 +36,7 @@ my_azure_vms:
       version: latest
   - name: execution-node-2
     ostype: Linux
-    priority: Spot
+    priority: None #Spot
     size: Standard_D2s_v3
     username: ansible
     password: Redhat1223334444
@@ -48,7 +48,7 @@ my_azure_vms:
       version: latest
   - name: managed-node-1
     ostype: Linux
-    priority: Spot
+    priority: None #None #Spot
     size: Standard_D2s_v3
     username: ansible
     password: Redhat1223334444
@@ -60,7 +60,7 @@ my_azure_vms:
       version: latest
   - name: managed-node-2
     ostype: Linux
-    priority: Spot
+    priority: None #Spot
     size: Standard_D2s_v3
     username: ansible
     password: Redhat1223334444
@@ -72,7 +72,7 @@ my_azure_vms:
       version: latest
   - name: managed-node-3
     ostype: Linux
-    priority: Spot
+    priority: None #Spot
     size: Standard_D2s_v3
     username: ansible
     password: Redhat1223334444

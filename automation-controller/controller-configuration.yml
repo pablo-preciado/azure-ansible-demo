@@ -151,7 +151,7 @@
          my_azure_vms:
            - name: hop-vm
              ostype: Linux
-             priority: Spot
+             priority: None #Spot
              size: Standard_D2s_v3
              username: ansible
              password: Redhat1223334444
@@ -163,7 +163,7 @@
                version: latest
            - name: execution-node-1
              ostype: Linux
-             priority: Spot
+             priority: None #Spot
              size: Standard_D2s_v3
              username: ansible
              password: Redhat1223334444
@@ -175,7 +175,7 @@
                version: latest
            - name: execution-node-2
              ostype: Linux
-             priority: Spot
+             priority: None #Spot
              size: Standard_D2s_v3
              username: ansible
              password: Redhat1223334444
@@ -187,7 +187,7 @@
                version: latest
            - name: managed-node-1
              ostype: Linux
-             priority: Spot
+             priority: None #Spot
              size: Standard_D2s_v3
              username: ansible
              password: Redhat1223334444
@@ -199,7 +199,7 @@
                version: latest
            - name: managed-node-2
              ostype: Linux
-             priority: Spot
+             priority: None #Spot
              size: Standard_D2s_v3
              username: ansible
              password: Redhat1223334444
@@ -211,7 +211,7 @@
                version: latest
            - name: managed-node-3
              ostype: Linux
-             priority: Spot
+             priority: None #Spot
              size: Standard_D2s_v3
              username: ansible
              password: Redhat1223334444
@@ -221,74 +221,3 @@
                offer: RHEL
                sku: '9_2'
                version: latest 
-         
-
-
-
-
-
-
-
-
-
-
-#
-#   - name: 'Create "Ubuntu demo - undeploy web servers" job template'
-#     ansible.controller.job_template:
-#       controller_host: "{{ my_controller_fqdn }}"
-#       controller_username: "{{ my_controller_user }}"
-#       controller_password: "{{ my_controller_pass }}"
-#       validate_certs: no
-#       name: "Ubuntu demo - undeploy web servers"
-#       job_type: "run"
-#       organization: "{{ my_customer_name }} Organization"
-#       inventory: "My Ubuntu demo inventory"
-#       project: "My Azure demo project"
-#       playbook: "undo-ubuntu-web-server.yml"
-#       credentials: "Target host credentials"
-#       state: "present"
-#
-#   - name: 'Create "Ubuntu demo - add info to web servers" job template'
-#     ansible.controller.job_template:
-#       controller_host: "{{ my_controller_fqdn }}"
-#       controller_username: "{{ my_controller_user }}"
-#       controller_password: "{{ my_controller_pass }}"
-#       validate_certs: no
-#       name: "Ubuntu demo - add info to web servers"
-#       job_type: "run"
-#       organization: "{{ my_customer_name }} Organization"
-#       inventory: "My Ubuntu demo inventory"
-#       project: "My Azure demo project"
-#       playbook: "add-info-to-index.yml"
-#       credentials: "Target host credentials"
-#       state: "present"
-#
-#   - name: 'Create "Ubuntu demo - demonstrate idempotency" job template'
-#     ansible.controller.job_template:
-#       controller_host: "{{ my_controller_fqdn }}"
-#       controller_username: "{{ my_controller_user }}"
-#       controller_password: "{{ my_controller_pass }}"
-#       validate_certs: no
-#       name: "Ubuntu demo - demonstrate idempotency"
-#       job_type: "run"
-#       organization: "{{ my_customer_name }} Organization"
-#       inventory: "My Ubuntu demo inventory"
-#       project: "My Azure demo project"
-#       playbook: "idempotency.yml"
-#       credentials: "Target host credentials"
-#       state: "present"
-#
-#   - name: 'Create "Ubuntu demo - fail idempotency" job template'
-#     ansible.controller.job_template:
-#       controller_host: "{{ my_controller_fqdn }}"
-#       controller_username: "{{ my_controller_user }}"
-#       controller_password: "{{ my_controller_pass }}"
-#       validate_certs: no
-#       name: "Ubuntu demo - fail idempotency"
-#       job_type: "run"
-#       organization: "{{ my_customer_name }} Organization"
-#       inventory: "My Ubuntu demo inventory"
-#       project: "My Azure demo project"
-#       playbook: "not-idempotency.yml"
-#       credentials: "Target host credentials"
-#       state: "present"
