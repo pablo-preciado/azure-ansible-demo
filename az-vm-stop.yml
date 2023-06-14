@@ -6,7 +6,7 @@
 
     - name: Get facts for all virtual machines of a Resource Group
       register: r
-      azure_rm_virtualmachine_info:
+      azure.azcollection.azure_rm_virtualmachine_info:
         resource_group: "{{ my_azure_resource_group }}"
 
     - name: Show list of VMs and state

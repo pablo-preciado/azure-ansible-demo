@@ -4,23 +4,11 @@
 
   tasks:
 
-    #- name: Get facts for a specific image
-    #  azure_rm_virtualmachineimage_info:
-    #    location: westeurope
-    #    publisher: RedHat
-    #    offer: RHEL
-    #    sku: '9_2'
-    #  register: wadibi
-    #
-    #- debug:
-    #    var: wadibi.vmimages
-
     - name: Create NIC for Virtual Machine
       loop: "{{ my_azure_vms }}"
       azure.azcollection.azure_rm_networkinterface:
         resource_group: "{{ my_azure_resource_group }}"
         name: "{{ item.name }}_nic"
-        #public_ip_name: "{{ item.name }}_ip"
         virtual_network: "{{ my_azure_vnet }}"
         subnet: "{{ my_azure_subnet }}"
         security_group: "{{ my_azure_network_security_group }}"
@@ -28,12 +16,16 @@
           - name: "{{ item.name }}_ip-config"
             public_ip_address_name: "{{ item.name }}_ip"
             primary: True
-            #private_ip_address:
             private_ip_allocation_method: "Dynamic"
-            #public_ip:
             public_ip_allocation_method: "Dynamic"
             application_security_groups: "{{ item.asg }}"
-        
+
+    - name: Configure DNS names
+      loop: "{{ my_azure_vms }}"
+      azure_rm_publicipaddress:
+        resource_group: "{{ my_azure_resource_group }}"
+        name: "{{ item.name }}_ip"
+        domain_name: "{{ item.name }}-{{ my_azure_resource_group }}"
         
     - name: Create VM
       loop: "{{ my_azure_vms }}"
@@ -51,5 +43,3 @@
           offer: "{{ item.image.offer }}"
           sku: "{{ item.image.sku }}"
           version: "{{ item.image.version }}"
-#        tags:
-#          blueprint: "{{ az_blueprint }}"
