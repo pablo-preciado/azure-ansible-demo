@@ -1,6 +1,7 @@
 - name: Deploy web server
   hosts: all
   gather_facts: false
+  become: true
   
   vars:
     my_customer_name: Exolum
