@@ -1,0 +1,173 @@
+---
+- name: Azure - Create infrastructure
+  hosts: localhost
+
+  tasks:
+
+    - name: Create Network Security Group
+      azure.azcollection.azure_rm_securitygroup:
+        resource_group: "{{ my_azure_resource_group }}"
+        name: "{{ my_azure_network_security_group }}"
+        rules:
+          - name: SSH-to-public
+            protocol: Tcp
+            destination_port_range: 22
+            access: Allow
+            priority: 1000
+            direction: Inbound
+            destination_application_security_groups:
+              - "{{ my_azure_public_asg }}"
+          - name: Ansible-receptor-to-public
+            protocol: Tcp
+            destination_port_range: 27199
+            access: Allow
+            priority: 1100
+            direction: Inbound
+            destination_application_security_groups:
+              - "{{ my_azure_public_asg }}"
+          - name: External-to-public
+            protocol: Tcp
+            destination_port_range:
+              - 80 # HTTP
+              - 443 # HTTPS
+              - 5986 # WinRM
+              - 3389 # RDP
+            access: Allow
+            priority: 1200
+            direction: Inbound
+            destination_application_security_groups:
+              - "{{ my_azure_public_asg }}"
+          - name: Ping-to-public
+            protocol: Icmp
+            access: Allow
+            priority: 1300
+            direction: Inbound
+            destination_application_security_groups:
+              - "{{ my_azure_public_asg }}"
+          - name: InternalTCP-to-public
+            protocol: Tcp
+            destination_port_range:
+              - 80 # HTTP
+              - 5986 # WinRM
+              - 3389 # RDP
+              - 53 # DNS
+              - 88 # Kerberos Authentication
+              - 135 # RPC
+              - 139 # Netlogon
+              - 389 # LDAP
+              - 445 # SMB
+              - 464 # Kerberos Authentication
+              - 5432 # PostgreSQL
+              - 636 # LDAPS (LDAP over TLS)
+              - 873 # Rsync 
+              - 3268-3269 # Global Catalog 
+              #- 1024-65535 # Ephemeral RPC ports
+            access: Allow
+            priority: 1400
+            direction: Inbound
+            source_address_prefix: "{{ my_azure_vnet_cidr }}"
+            destination_application_security_groups:
+              - "{{ my_azure_public_asg }}"
+          - name: InternalUDP-to-public
+            protocol: Udp
+            destination_port_range:
+              - 53 # DNS
+              - 88 # Kerberos Authentication
+              - 123 # NTP
+              - 137-138 # Netlogon 
+              - 389 # LDAP 
+              - 445 # SMB
+              - 464 # Kerberos Authentication
+              - 1024-65535 # Ephemeral RPC ports
+            access: Allow
+            priority: 1500
+            direction: Inbound
+            source_address_prefix: "{{ my_azure_vnet_cidr }}"
+            destination_application_security_groups:
+              - "{{ my_azure_public_asg }}"
+          - name: SSH-to-private
+            protocol: Tcp
+            destination_port_range: 22
+            access: Allow
+            priority: 400
+            direction: Inbound
+            destination_application_security_groups:
+              - "{{ my_azure_private_asg }}"
+            source_application_security_groups:
+              - "{{ my_azure_public_asg }}"
+          - name: Ansible-receptor-to-private
+            protocol: Tcp
+            destination_port_range: 27199
+            access: Allow
+            priority: 500
+            direction: Inbound
+            destination_application_security_groups:
+              - "{{ my_azure_private_asg }}"
+            source_application_security_groups:
+              - "{{ my_azure_public_asg }}"
+          - name: External-to-private
+            protocol: Tcp
+            destination_port_range:
+              - 80 # HTTP
+              - 443 # HTTPS
+              - 5986 # WinRM
+              - 3389 # RDP
+            access: Allow
+            priority: 600
+            direction: Inbound
+            destination_application_security_groups:
+              - "{{ my_azure_private_asg }}"
+            #source_application_security_groups:
+            #  - "{{ my_azure_public_asg }}"
+          - name: Ping-to-private
+            protocol: Icmp
+            access: Allow
+            priority: 700
+            direction: Inbound
+            destination_application_security_groups:
+              - "{{ my_azure_private_asg }}"
+            source_application_security_groups:
+              - "{{ my_azure_public_asg }}"
+          - name: InternalTCP-to-private
+            protocol: Tcp
+            destination_port_range:
+              - 80 # HTTP
+              - 5986 # WinRM
+              - 3389 # RDP
+              - 53 # DNS
+              - 88 # Kerberos Authentication
+              - 135 # RPC
+              - 139 # Netlogon
+              - 389 # LDAP
+              - 445 # SMB
+              - 464 # Kerberos Authentication
+              - 5432 # PostgreSQL
+              - 636 # LDAPS (LDAP over TLS)
+              - 873 # Rsync 
+              - 3268-3269 # Global Catalog 
+              #- 1024-65535 # Ephemeral RPC ports
+            access: Allow
+            priority: 800
+            direction: Inbound
+            destination_application_security_groups:
+              - "{{ my_azure_private_asg }}"
+            source_application_security_groups:
+              - "{{ my_azure_public_asg }}"
+          - name: InternalUDP-to-private
+            protocol: Udp
+            destination_port_range:
+              - 53 # DNS
+              - 88 # Kerberos Authentication
+              - 123 # NTP
+              - 137-138 # Netlogon 
+              - 389 # LDAP 
+              - 445 # SMB
+              - 464 # Kerberos Authentication
+              - 1024-65535 # Ephemeral RPC ports
+            access: Allow
+            priority: 900
+            direction: Inbound
+            destination_application_security_groups:
+              - "{{ my_azure_private_asg }}"
+            source_application_security_groups:
+              - "{{ my_azure_public_asg }}"

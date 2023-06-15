@@ -1,0 +1,23 @@
+- name: Deploy web server
+  hosts: all
+  
+  vars:
+    my_customer_name: Exolum
+
+  tasks:
+    
+    - name: Install httpd package
+      ansible.builtin.dnf:
+        name: httpd
+        state: latest
+    
+    - name: Start and enable httpd service
+      ansible.builtin.service:
+        name: httpd
+        enabled: true
+        state: started
+
+    - name: Copy your index file
+      ansible.builtin.template:
+        src: "templates/index.html.j2"
+        dest: "/var/www/html/index.html"

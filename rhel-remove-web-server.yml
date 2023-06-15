@@ -1,0 +1,15 @@
+- name: Demo remove webserver
+  hosts: all
+
+  tasks:
+
+    - name: Stop and disable httpd service
+      ansible.builtin.service:
+        name: httpd
+        enabled: false
+        state: stopped
+
+    - name: Remove httpd package
+      ansible.builtin.dnf:
+        name: httpd
+        state: absent
