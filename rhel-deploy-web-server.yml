@@ -23,3 +23,10 @@
       ansible.builtin.template:
         src: "templates/index.html.j2"
         dest: "/var/www/html/index.html"
+
+    - name: open firewall
+      ansible.posix.firewalld:
+        service: http
+        state: enabled
+        immediate: true
+        permanent: true
