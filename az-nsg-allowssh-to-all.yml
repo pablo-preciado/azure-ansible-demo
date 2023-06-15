@@ -15,7 +15,7 @@
               - 80 # HTTP
               - 443 # HTTPS
             access: Allow
-            priority: 400
+            priority: 300
             direction: Inbound
             destination_application_security_groups:
               - "{{ my_azure_public_asg }}"
