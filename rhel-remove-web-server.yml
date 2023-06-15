@@ -1,5 +1,6 @@
 - name: Demo remove webserver
   hosts: all
+  become: true
 
   tasks:
 
