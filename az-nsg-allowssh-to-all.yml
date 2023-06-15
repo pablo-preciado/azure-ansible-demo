@@ -9,6 +9,17 @@
         resource_group: "{{ my_azure_resource_group }}"
         name: "{{ my_azure_network_security_group }}"
         rules:
+          - name: To-webservers
+            protocol: Tcp
+            destination_port_range:
+              - 80 # HTTP
+              - 443 # HTTPS
+            access: Allow
+            priority: 400
+            direction: Inbound
+            destination_application_security_groups:
+              - "{{ my_azure_public_asg }}"
+              - "{{ my_azure_private_asg }}"
           - name: SSH-to-public
             protocol: Tcp
             destination_port_range: 22
@@ -28,8 +39,8 @@
           - name: External-to-public
             protocol: Tcp
             destination_port_range:
-              - 80 # HTTP
-              - 443 # HTTPS
+              #- 80 # HTTP
+              #- 443 # HTTPS
               - 5986 # WinRM
               - 3389 # RDP
             access: Allow
@@ -47,7 +58,7 @@
           - name: InternalTCP-to-public
             protocol: Tcp
             destination_port_range:
-              - 80 # HTTP
+              #- 80 # HTTP
               - 5986 # WinRM
               - 3389 # RDP
               - 53 # DNS
@@ -106,8 +117,8 @@
           - name: External-to-private
             protocol: Tcp
             destination_port_range:
-              - 80 # HTTP
-              - 443 # HTTPS
+              #- 80 # HTTP
+              #- 443 # HTTPS
               - 5986 # WinRM
               - 3389 # RDP
             access: Allow
@@ -115,8 +126,8 @@
             direction: Inbound
             destination_application_security_groups:
               - "{{ my_azure_private_asg }}"
-            #source_application_security_groups:
-            #  - "{{ my_azure_public_asg }}"
+            source_application_security_groups:
+              - "{{ my_azure_public_asg }}"
           - name: Ping-to-private
             protocol: Icmp
             access: Allow
@@ -129,7 +140,7 @@
           - name: InternalTCP-to-private
             protocol: Tcp
             destination_port_range:
-              - 80 # HTTP
+              #- 80 # HTTP
               - 5986 # WinRM
               - 3389 # RDP
               - 53 # DNS
