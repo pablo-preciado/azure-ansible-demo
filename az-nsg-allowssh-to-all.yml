@@ -10,7 +10,7 @@
         name: "{{ my_azure_network_security_group }}"
         rules:
           - name: To-webservers
-            protocol: Tcp
+            protocol: TCP
             destination_port_range:
               - 80 # HTTP
               - 443 # HTTPS
