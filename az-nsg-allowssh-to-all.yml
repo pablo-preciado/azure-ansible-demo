@@ -115,8 +115,8 @@
             direction: Inbound
             destination_application_security_groups:
               - "{{ my_azure_private_asg }}"
-            source_application_security_groups:
-              - "{{ my_azure_public_asg }}"
+            #source_application_security_groups:
+            #  - "{{ my_azure_public_asg }}"
           - name: Ping-to-private
             protocol: Icmp
             access: Allow
