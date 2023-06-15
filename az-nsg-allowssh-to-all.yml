@@ -17,9 +17,9 @@
             access: Allow
             priority: 300
             direction: Inbound
-            destination_application_security_groups:
-              - "{{ my_azure_public_asg }}"
-              - "{{ my_azure_private_asg }}"
+            #destination_application_security_groups:
+            #  - "{{ my_azure_public_asg }}"
+            #  - "{{ my_azure_private_asg }}"
           - name: SSH-to-public
             protocol: Tcp
             destination_port_range: 22
